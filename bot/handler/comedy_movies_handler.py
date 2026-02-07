@@ -7,6 +7,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from bot.buttons.reply import build_reply_button
 from bot.dispatcher import dp
 from bot.states import SectorState
+from bot.utils.safe_media import safe_answer_video
 
 
 @dp.message(SectorState.movies_section, F.text == __("😂 Comedy"))
@@ -54,7 +55,13 @@ async def yes_handler_comedy(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True, one_time_keyboard=True)
     await state.set_state(SectorState.yes_hand_comedy)
-    await message.answer_video(video_id, caption=_("🎬 Home Alone (1990)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Home Alone (1990)"),
+        reply_markup=rkb,
+    )
 
 ##################################################################################################################
 #
