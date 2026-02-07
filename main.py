@@ -14,7 +14,7 @@ from bot.utils.settings import on_startup
 load_dotenv()
 import os
 
-TOKEN = os.getenv('TOKEN')
+TOKEN = os.getenv('BOT_TOKEN')
 
 
 async def main() -> None:
@@ -22,7 +22,10 @@ async def main() -> None:
     dp.startup.register(on_startup)
     dp.update.middleware(FSMI18nMiddleware(i18n))
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-    await dp.start_polling(bot)
+    try:
+        await dp.start_polling(bot)
+    finally:
+        await bot.session.close()
 
 
 if __name__ == "__main__":

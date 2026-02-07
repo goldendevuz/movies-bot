@@ -16,7 +16,22 @@ class DatabaseConfig:
 
     @property
     def db_url(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        # 1️⃣ Agar DB_URL bo'lsa — faqat shuni ishlat
+        DB_URL = os.getenv("DB_URL")
+
+        if DB_URL:
+            return DB_URL.strip()
+        else:
+            # 2️⃣ Port faqat mavjud bo'lsa qo‘shiladi
+            if self.DB_PORT and str(self.DB_PORT).lower() != "none":
+                host = f"{self.DB_HOST}:{int(self.DB_PORT)}"
+            else:
+                host = self.DB_HOST
+
+            return (
+                f"postgresql+asyncpg://"
+                f"{self.DB_USER}:{self.DB_PASS}@{host}/{self.DB_NAME}"
+            )
 
 
 @dataclass

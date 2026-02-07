@@ -7,6 +7,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from bot.buttons.reply import build_reply_button
 from bot.dispatcher import dp
 from bot.handler.main_menu import SectorState
+from bot.utils.safe_media import safe_answer_video
 
 
 @dp.message(SectorState.movies_section, F.text == __("🎭 Drama"))
@@ -52,12 +53,20 @@ async def forrest_gump(message: Message, state: FSMContext):
 @dp.message(SectorState.forest_gump, F.text == __("Yes"))
 async def yes_handler(message: Message, state: FSMContext):
     video_id = "BAACAgIAAxkBAAINLWhwpE_rZ_cvr6VifZoO-aqNWXqqAALkYgAC9XK5SeqQVnNkPDoRNgQ"
+
     rkb = ReplyKeyboardBuilder()
     rkb.add(KeyboardButton(text=_("⬅️ Back")))
     rkb.adjust(1)
-    rkb = rkb.as_markup(resize_keyboard=True)
+    markup = rkb.as_markup(resize_keyboard=True)
+
     await state.set_state(SectorState.yes_hand_drama_forrest_gump)
-    await message.answer_video(video_id, caption=_("🎬 Forrest Gump (1994)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Forrest Gump (1994)"),
+        reply_markup=markup,
+    )
 
 
 @dp.message(SectorState.dramas_section, F.text == __("🎬 Titanic (1997)"))
@@ -94,7 +103,13 @@ async def yes_handler_drama_titanic(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True)
     await state.set_state(SectorState.yes_hand_drama_titanic)
-    await message.answer_video(video_id, caption=_("🎬 Titanic (1997)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Titanic (1997)"),
+        reply_markup=rkb,
+    )
 
 
 @dp.message(SectorState.dramas_section, F.text == __("🎬 Joker (2019)"))
@@ -130,8 +145,14 @@ async def yes_handler_drama_titanic(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True)
     await state.set_state(SectorState.yes_hand_drama_joker)
-    await message.answer_video(video_id, caption=_("🎬 Joker (2019)"))
 
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Joker (2019)"),
+        reply_markup=rkb,
+    )
+    
 
 @dp.message(SectorState.dramas_section, F.text == __("🎬 The Whale (2022)"))
 async def whale(message: Message, state: FSMContext):
@@ -166,4 +187,10 @@ async def yes_handler_drama_titanic(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True)
     await state.set_state(SectorState.yes_hand_drama_whale)
-    await message.answer_video(video_id, caption=_("🎬 The Whale (2022)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 The Whale (2022)"),
+        reply_markup=rkb,
+    )

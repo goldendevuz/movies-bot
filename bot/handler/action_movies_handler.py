@@ -7,6 +7,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from bot.buttons.reply import build_reply_button
 from bot.dispatcher import dp
 from bot.states import SectorState
+from bot.utils.safe_media import safe_answer_video
 
 
 @dp.message(SectorState.movies_section, F.text == __("🎬 Action"))
@@ -56,7 +57,13 @@ async def yes_handler_action_smiths(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True)
     await state.set_state(SectorState.yes_hand_action_smiths)
-    await message.answer_video(video_id, caption=_("🎬 Mr. & Mrs.Smith (2005)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Mr. & Mrs.Smith (2005)"),
+        reply_markup=rkb,
+    )
 
 
 @dp.message(SectorState.action_section, F.text == __("🎬 Damsel (2024)"))
@@ -93,7 +100,13 @@ async def yes_handler_action_damsel(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True)
     await state.set_state(SectorState.yes_hand_action_damsel)
-    await message.answer_video(video_id, caption=_("🎬 Damsel (2024)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Damsel (2024)"),
+        reply_markup=rkb,
+    )
 
 
 @dp.message(SectorState.action_section, F.text == __("🎬 Avengers: Endgame (2019)"))
@@ -129,7 +142,13 @@ async def yes_handler_action_avengers(message: Message, state: FSMContext):
     rkb.adjust(1)
     rkb = rkb.as_markup(resize_keyboard=True)
     await state.set_state(SectorState.yes_hand_action_avengers)
-    await message.answer_video(video_id, caption=_("🎬 Avengers: Endgame (2019)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Avengers: Endgame (2019)"),
+        reply_markup=rkb,
+    )
 
 
 @dp.message(SectorState.action_section, F.text == __("🎬 Fury (2014)"))
@@ -165,4 +184,10 @@ async def yes_handler_action_fury(message: Message, state: FSMContext):
     rkb = rkb.as_markup(resize_keyboard=True)
     video_id = "BAACAgIAAxkBAAINoGhwsMfCaEyFTPPkNHhCfnt0uLXkAAK3AwAC9k5BSny9_2LjpqRcNgQ"
     await state.set_state(SectorState.yes_hand_action_fury)
-    await message.answer_video(video_id, caption=_("🎬 Fury (2014)"))
+
+    await safe_answer_video(
+        message,
+        video_id=video_id,
+        caption=_("🎬 Fury (2014)"),
+        reply_markup=rkb,
+    )
